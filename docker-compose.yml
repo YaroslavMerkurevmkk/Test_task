@@ -1,0 +1,37 @@
+version: '3.1'
+
+services:
+  mysql:
+    container_name: flask_mysql
+    image: mysql
+    restart: unless-stopped
+    #    ports:
+    #      - 5656:3306
+    environment:
+      # credentials
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: flask
+      MYSQL_USER: flask
+      MYSQL_PASSWORD: password
+    volumes:
+      - mysql_data:/home
+
+
+  server:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      DB_HOST: mysql
+      DB_NAME: flask
+      DB_USER: flask
+      DB_PASSWORD: password
+    container_name: server
+    depends_on:
+      - mysql
+
+
+
+volumes:
+  mysql_data: null
+
